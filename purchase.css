@@ -1,0 +1,114 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #437cd1; /* Blue background */
+    color: #362bd1; /* Set the text color to white */
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #aaa4a4; /* Keep the container background white */
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #000; /* Set text inside the container to black */
+}
+
+/* Title Styles */
+.shop-title {
+    text-align: center;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.date-time label {
+    margin-right: 5px;
+}
+
+.user-name {
+    font-size: 16px;
+    color: #000;
+}
+
+/* Dialog Box with Red Border */
+.dialog-box {
+    border: 8px solid rgb(236, 45, 118);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Customer Info */
+.customer-info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.customer-info input, .sale-row input {
+    padding: 5px;
+    width: 200px;
+}
+
+.sale-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bank-menu {
+    margin-bottom: 20px;
+}
+
+.bank-menu label {
+    margin-right: 10px;
+}
+
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.left-bottom, .right-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.left-bottom input, .right-bottom input {
+    display: flex;
+    flex-direction:column ;
+    padding: 5px;
+    width: 200px;
+}
+.exit-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#exit-btn {
+    width: 100px;
+    height: 40px;
+    background-color: red; /* red background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

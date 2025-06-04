@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Code</title>
+    <link rel="stylesheet" type="text/css" href="item.code.css">
+</head>
+<body style="background-color: #708c93;">
+    <div style="display: flex; justify-content: center; align-items: center; padding: 10px;">
+        <div style="font-size: 24px; font-weight: bold;">Mazari Services Agency</div>
+    </div>
+    <div style="border: 6px solid red; padding: 20px; width: 900px; margin: 40px auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <label for="company">Company:</label>
+                <input type="text" id="company" placeholder="Company" oninput="generateItemCode()">
+            </div>
+            <div>
+                <label for="type">Type:</label>
+                <input type="text" id="type" placeholder="Type" oninput="generateItemCode()">
+            </div>
+            <div>
+                <label for="item-code">Item Code:</label>
+                <input type="text" id="item-code" placeholder="Item Code" readonly>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; padding: 10px;">
+            <button id="save-btn" style="background-color: #7c35d9; color: #fff; border: none; border-radius: 5px; cursor: pointer; padding: 10px 20px;" onclick="saveRecord()">Save</button>
+        </div>
+        <div style="display: flex; justify-content: flex-end; padding: 10px;">
+            <button id="new-btn" style="background-color: #6443c9; color: #fff; border: none; border-radius: 5px; cursor: pointer; padding: 10px 20px;" onclick="openNewRecord()">New</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to generate Item Code by combining Company and Type
+        function generateItemCode() {
+            const company = document.getElementById("company").value;
+            const type = document.getElementById("type").value;
+            document.getElementById("item-code").value = company + "-" + type;
+        }
+
+        // Function to save the current record
+        function saveRecord() {
+            const company = document.getElementById("company").value;
+            const type = document.getElementById("type").value;
+            const itemCode = document.getElementById("item-code").value;
+            if (company && type) {
+                alert("Record Saved:\nCompany: " + company + "\nType: " + type + "\nItem Code: " + itemCode);
+                // Code to save the record could go here, such as sending it to a backend server
+            } else {
+                alert("Please fill out both Company and Type fields.");
+            }
+        }
+
+        // Function to open a new record dialog (clear inputs for a new record)
+        function openNewRecord() {
+            document.getElementById("company").value = "";
+            document.getElementById("type").value = "";
+            document.getElementById("item-code").value = "";
+            alert("Ready for a new record.");
+        }
+    </script>
+    <script src="item.code.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="date-time" id="date-time"></div>
+            <div class="welcome-message"><b> Concept Mobiles </b></div>
+           <button id="close-btn" style="background-color: rgb(181, 86, 245); color: rgb(4, 4, 4);" onclick="exitPage()">Close</button>
+        </div>
+        
+        <!-- Menu Sections -->
+        <div class="dashboard-menu">
+            <ul>
+                <li><button id="sale-btn">Sale</button></li>
+                <li><button id="purchase-btn">Purchase</button></li>
+                <li><button id="daybook-btn">DayBook</button></li>
+            </ul>
+        </div>
+        <div class="dashboard-menu">
+            <ul>
+                <li><button id="customer-btn">Customer</button></li>
+                <li><button id="item-btn">Item</button></li>
+                <li><button id="item-code-btn">Item Code</button></li>
+            </ul>
+        </div>
+        <div class="dashboard-menu">
+            <ul>
+                <li><button id="stock-btn">Stock</button></li>
+                <li><button id="party-btn">Party</button></li>
+                <li><button id="daily-report-btn">Daily Report</button></li>
+            </ul>
+        </div>
+        <div class="exit-button">
+            <button id="exit-btn" style="background-color: rgb(181, 86, 245); color: rgb(4, 4, 4);" onclick="exitPage()">Exit</button>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

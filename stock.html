@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Report</title>
+    <link rel="stylesheet" type="text/css" href="stock.ccs">
+</head>
+<body style="background-color: #6e7e96;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+        <div id="date-time" style="font-size: 18px;"></div>
+        <div style="font-size: 24px; font-weight: bold;">*Stock Report*</div>
+        <div id="user-name" style="font-size: 18px;"></div>
+    </div>
+    <div style="border: 6px solid rgb(231, 26, 118); padding: 20px; width: 800px; margin: 40px auto;">
+        <table id="stock-table" style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                <th style="border-right: 5px solid #000;">Product Name</th>
+                <th style="border-right: 5px solid #000;">IMEI1</th>
+                <th style="border-right: 5px solid #000;">IMEI2</th>
+                <th style="border-right: 5px solid #000;">Quantity</th>
+                <th style="border-right: 5px solid #000;">Total</th>
+                <th style="border-right: 5px solid #000;">Sub Total</th>
+            </tr>
+        </table>
+        <div id="stock-data"></div>
+        <table id="sub-total-table" style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+            <tr>
+                <th style="border-right: 5px solid #000;">Sub Total</th>
+                <th id="sub-total"></th>
+            </tr>
+        </table>
+    </table>
+    <table id="total-quantity" style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+        <tr>
+            <th style="border-right: 5px solid #000;">Total Quantity</th>
+            <th id="total-quantity"></th>
+        </tr>
+    </table>
+    </div>
+    <script src="stock.js"></script>
+</body>
+</html>

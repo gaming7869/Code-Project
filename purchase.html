@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobiles Purchase (Mazari Mobiles)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hsl(0, 0%, 96%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 1200px;
+            background-color: #fff;
+            border: 8px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .header input {
+            width: 120px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-weight: bold;
+        }
+     
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            margin-bottom: 1px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .barcode-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            margin-top: 1px;
+        }
+        .summary {
+            position: left bottom;
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            font-weight: bold;
+        }
+        .summary div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .summary label {
+            width: 100px;
+            text-align: left;
+        }
+        .summary input {
+            width: 80px;
+            padding: 4px;
+            border: 4px solid #ddd;
+            text-align: center;
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    </head>
+    <body>
+
+<div class="container">
+    <div class="header">
+        <div>Date: <input type="text" id="date" value="   " readonly></div>
+        <div>Mobiles Purchase (Mazari Mobiles)</div>
+        <div>Invoice No: <input type="text" id="invoiceNo" value="   " readonly></div>
+        <button onclick="generateBarcode()">📷Generate Barcode</button>
+    </div>
+     <!-- Party Info Row -->
+     <div class="customer-info">
+        <label for="partyName">Party Name:</label>
+        <input type="text" id="partName" placeholder="Enter Party Name">
+    </div>
+    <div class="table-container">
+        <table id="purchaseTable">
+            <thead>
+            <tr>
+                <th>IMEI-1</th>
+                <th>IMEI-2</th>
+                <th>Item Code</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Recheck</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="data-row">
+                <td><input type="text" class="imei1 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+                <td><input type="text" class="imei2 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+                <td><input type="text" class="itemCode" onblur="addRowIfNeeded(this)"></td>
+                <td><input type="number" class="qty" value="1" oninput="generateIMEIFields(this)"></td>
+                <td><input type="number" class="rate" value="0" oninput="calculateAmount()"></td>
+                <td><input type="text" class="amount" readonly></td>
+                <td><input type="checkbox" class="recheck"></td>
+            </tr>
+        </tbody>
+    </table>
+        <div class="imeis-container" id="imeisContainer"></div>
+    </div>
+    <div class="barcode-container" id="barcodeContainer">
+        <svg id="barcode1"></svg>
+        <div> <span id="barcodeItemCode"></span></div>
+        <svg id="barcode2"></svg>
+    </div>
+            <!-- Rows will be added dynamically -->
+        </tbody>
+    </table>
+         <!-- Sale Return Table Structure -->
+         <button onclick="toggleSaleReturn()">Purchase Return</button>
+         <div id="purchaseReturnTable" style="display: none;">
+             <table id="returnTable">
+                 <thead>
+                     <tr>
+                         <th>IMEI-1</th>
+                         <th>IMEI-2</th>
+                         <th>Item Code</th>
+                         <th>Qty</th>
+                         <th>Rate</th>
+                         <th>Amount</th>
+                         <th>Recheck</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr class="data-row">
+                         <td><input type="text" class="imei1 imei-field" maxlength="15" oninput="restrictIMEI(this)"></td>
+                         <td><input type="text" class="imei2 imei-field" maxlength="15" oninput="restrictIMEI(this)"></td>
+                         <td><input type="text" class="itemCode" onblur="addRowIfNeededReturn(this)"></td>
+                         <td><input type="number" class="qty" value="1" oninput="calculateAmount()"></td>
+                         <td><input type="number" class="rate" value="0" oninput="calculateAmount()"></td>
+                         <td><input type="text" class="amount" readonly></td>
+                         <td><input type="checkbox" class="recheck"></td>
+                     </tr>
+                 </tbody>
+             </table>
+         </div>
+     
+
+
+    <div class="summary">
+        <div>
+            <label>Net Total:</label>
+            <input type="text" id="netTotal" readonly>
+        </div>
+        <div>
+            <label>Sale Return:</label>
+            <input type="number" id="SaleReturn" readonly>
+        </div>
+        <div>
+            <label>Total:</label>
+            <input type="text" id="total" readonly>
+        </div>
+        <div>
+            <label>Cash Deposit:</label>
+            <input type="number" id="cashDeposit" value="0" oninput="calculateCurrentTotal()">
+        </div>
+        <div>
+            <label>Cash Payment:</label>
+            <input type="number" id="cashPayment" value="0" oninput="calculateCurrentTotal()">
+        </div>
+        <div>
+            <label>Bank Deposit:</label>
+            <input type="number" id="bankDeposit" value="0" oninput="calculateCurrentTotal()">
+        </div>
+        <div>
+            <label>Bank Payment:</label>
+            <input type="number" id="bankPayment" value="0" oninput="calculateCurrentTotal()">
+        </div>
+        <div>
+            <label>Current Total:</label>
+            <input type="text" id="currentTotal" readonly>
+        </div>
+    </div>
+    
+
+    <div class="buttons">
+        <button onclick="saveData()">Save</button>
+       
+    </div>
+</div>
+
+<script>   
+    // Function to restrict IMEI input to only numbers and 15 digits
+    function restrictIMEI(element) {
+        element.value = element.value.replace(/[^0-9]/g, "").substring(0, 15);
+    }
+
+    // Function to generate IMEI fields based on quantity
+    function generateIMEIFields(element) {
+        const row = element.closest("tr");
+        const qty = parseInt(row.querySelector(".qty").value) || 1;
+
+        // Hide all other IMEI containers
+        const imeiContainers = document.querySelectorAll(".imei-container");
+        imeiContainers.forEach(container => {
+            container.style.display = "none";
+        });
+
+        // Check if a container for dynamic IMEI fields already exists below the current row
+        let imeiContainer = row.nextElementSibling;
+        if (!imeiContainer || !imeiContainer.classList.contains("imei-container")) {
+            imeiContainer = document.createElement("tr");
+            imeiContainer.classList.add("imei-container");
+            imeiContainer.innerHTML = `
+                <td colspan="7">
+                    <div class="imeis-container"></div>
+                </td>
+            `;
+            row.parentNode.insertBefore(imeiContainer, row.nextSibling);
+        }
+
+        const imeisContainer = imeiContainer.querySelector(".imeis-container");
+        imeisContainer.innerHTML = ""; // Clear previous IMEI fields for this row
+
+        // Generate new IMEI fields based on Qty
+        for (let i = 1; i < qty; i++) {
+            const imeiEntry = document.createElement("div");
+            imeiEntry.classList.add("imei-entry");
+            imeiEntry.innerHTML = `
+                <label> </label>
+                <input type="text" name="-${i}" maxlength="15" oninput="restrictIMEI(this)">
+                <label></label>
+                <input type="text" name="-${i}" maxlength="15" oninput="restrictIMEI(this)">
+            `;
+            imeisContainer.appendChild(imeiEntry);
+        }
+
+        // Show the IMEI container for the current row
+        imeiContainer.style.display = qty > 1 ? "table-row" : "none";
+    }
+
+    // Function to calculate the amount for each row
+    function calculateAmount() {
+        const rows = document.querySelectorAll("#purchaseTable .data-row");
+        rows.forEach(row => {
+            const qty = parseFloat(row.querySelector(".qty").value) || 0;
+            const rate = parseFloat(row.querySelector(".rate").value) || 0;
+            const amount = qty * rate;
+            row.querySelector(".amount").value = amount.toFixed(2);
+        });
+        calculateNetTotal(); // Recalculate the net total
+    }
+
+    // Function to calculate the net total of all rows
+    function calculateNetTotal() {
+        const rows = document.querySelectorAll("#purchaseTable .data-row");
+        let netTotal = 0;
+        rows.forEach(row => {
+            const amount = parseFloat(row.querySelector(".amount").value) || 0;
+            netTotal += amount;
+        });
+        document.getElementById("netTotal").value = netTotal.toFixed(2);
+    }
+
+    // Add row if needed after entering IMEI and item code
+    function addRowIfNeeded(element) {
+        const row = element.closest("tr");
+        const imei1 = row.querySelector(".imei1").value.trim();
+        const imei2 = row.querySelector(".imei2").value.trim();
+        const itemCode = row.querySelector(".itemCode").value.trim();
+
+        if (imei1 && imei2 && itemCode) {
+            createNewRow(); // Create a new empty row
+        }
+    }
+
+    // Function to create a new row with empty fields
+    function createNewRow() {
+        const table = document.getElementById("purchaseTable").querySelector("tbody");
+
+        // Create a new row with empty fields
+        const newRow = document.createElement("tr");
+        newRow.classList.add("data-row");
+        newRow.innerHTML = `
+            <td><input type="text" class="imei1 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+            <td><input type="text" class="imei2 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+            <td><input type="text" class="itemCode" placeholder=" " onblur="addRowIfNeeded(this)"></td>
+            <td><input type="number" class="qty" value="1" oninput="generateIMEIFields(this)"></td>
+            <td><input type="number" class="rate" value="0" oninput="calculateAmount()"></td>
+            <td><input type="text" class="amount" readonly></td>
+            <td><input type="checkbox" class="recheck"></td>
+        `;
+        table.appendChild(newRow);
+
+        // Automatically generate IMEI fields for the new row
+        generateIMEIFields(newRow.querySelector(".qty"));
+    }
+
+    // Handle row click to hide/show relevant IMEI fields
+    document.addEventListener("click", function (event) {
+        const clickedRow = event.target.closest(".data-row");
+        if (clickedRow) {
+            const allRows = document.querySelectorAll(".data-row");
+            allRows.forEach(row => {
+                const imeiContainer = row.nextElementSibling;
+                if (imeiContainer && imeiContainer.classList.contains("imei-container")) {
+                    imeiContainer.style.display = "none";
+                }
+            });
+
+            // Show IMEI fields for the clicked row
+            const qtyField = clickedRow.querySelector(".qty");
+            generateIMEIFields(qtyField);
+        }
+    });
+    function addRowIfNeededReturn(element) {
+        const row = element.closest("tr");
+        const imei1 = row.querySelector(".imei1").value;
+        const imei2 = row.querySelector(".imei2").value;
+        const itemCode = row.querySelector(".itemCode").value;
+
+        if (imei1 && imei2 && itemCode) {
+            createNewReturnRow();
+        }
+    }
+
+    function createNewReturnRow() {
+        const table = document.getElementById("returnTable");
+        const newRow = document.createElement("tr");
+        newRow.classList.add("data-row");
+        newRow.innerHTML = `
+            <td><input type="text" class="imei1 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+            <td><input type="text" class="imei2 imei-field" maxlength="15" placeholder=" " oninput="restrictIMEI(this)"></td>
+            <td><input type="text" class="itemCode" onblur="addRowIfNeededReturn(this)"></td>
+            <td><input type="number" class="qty" value="1" oninput="calculateAmount(this)"></td>
+            <td><input type="number" class="rate" value="0" oninput="calculateAmount(this)"></td>
+            <td><input type="text" class="amount" readonly></td>
+            <td><input type="checkbox" class="recheck"></td>
+        `;
+        table.appendChild(newRow);
+    }
+    function generateBarcode() {
+        const imei1Field = document.querySelector('.imei1');
+        const imei2Field = document.querySelector('.imei2');
+        const itemCodeField = document.querySelector('.itemCode');
+
+        if (imei1Field && imei2Field && itemCodeField) {
+            const imei1 = imei1Field.value;
+            const imei2 = imei2Field.value;
+            const itemCode = itemCodeField.value;
+
+            if (imei1.length === 15 && imei2.length === 15) {
+                JsBarcode("#barcode1", imei1, { format: "CODE128", displayValue: true });
+                JsBarcode("#barcode2", imei2, { format: "CODE128", displayValue: true });
+
+                document.getElementById("barcodeItemCode").textContent = itemCode;
+                document.getElementById("barcodeContainer").style.display = "flex"; // Show barcode container
+            } else {
+                alert("Please enter valid IMEI1 and IMEI2 numbers (15 digits each).");
+                document.getElementById("barcodeContainer").style.display = "none"; // Hide barcode container if invalid
+            }
+        } else {
+            alert("Please fill in IMEI1, IMEI2, and Item Code fields.");
+        }
+    }
+
+    function restrictIMEI(element) {
+        // Allow only numbers and restrict to 15 digits
+        element.value = element.value.replace(/[^0-9]/g, '').substring(0, 15);
+    }
+    function restrictIMEI(element) {
+        // Allow only numbers and restrict to 15 digits
+        element.value = element.value.replace(/[^0-9]/g, '').substring(0, 15);
+    }
+    function generateIMEIFields(element) {
+        const row = element.closest("tr");
+        const qty = parseInt(row.querySelector(".qty").value);
+        const imeisContainer = document.getElementById('imeisContainer');
+        imeisContainer.innerHTML = ''; // Clear previous IMEI fields
+
+        for (let i = 2; i <= qty; i++) {
+            const imeiEntry = document.createElement('div');
+            imeiEntry.classList.add('imei-entry');
+            imeiEntry.innerHTML = `
+                <label> </label>
+                <input type="text" name="imei1-${i}" maxlength="15" oninput="restrictIMEI(this)">
+                <label> </label>
+                <input type="text" name="imei2-${i}" maxlength="15" oninput="restrictIMEI(this)">
+            `;
+            imeisContainer.appendChild(imeiEntry);
+        }
+
+    }
+    function calculateRowAmount(row) {
+        const qty = parseFloat(row.querySelector(".qty").value) || 0;
+        const rate = parseFloat(row.querySelector(".rate").value) || 0;
+        const amount = qty * rate;
+        row.querySelector(".amount").value = amount.toFixed(2);
+        return amount;
+    }
+
+    function calculateNetTotal() {
+        const rows = document.querySelectorAll("#purchaseTable .data-row");
+        let netTotal = 0;
+        rows.forEach(row => {
+            netTotal += calculateRowAmount(row);
+        });
+        document.getElementById('netTotal').value = netTotal.toFixed(2);
+        calculateTotal();
+    }
+
+    function calculateSaleReturnTotal() {
+        const rows = document.querySelectorAll("#returnTable .data-row");
+        let saleReturnTotal = 0;
+        rows.forEach(row => {
+            saleReturnTotal += calculateRowAmount(row);
+        });
+        document.getElementById('SaleReturn').value = saleReturnTotal.toFixed(2);
+        calculateTotal();
+    }
+
+    function calculateTotal() {
+        const netTotal = parseFloat(document.getElementById('netTotal').value) || 0;
+        const saleReturn = parseFloat(document.getElementById('SaleReturn').value) || 0;
+        const total = netTotal - saleReturn;
+        document.getElementById('total').value = total.toFixed(2);
+        calculateCurrentTotal(); // Update current total whenever total changes
+    }
+
+    function calculateAmount() {
+        calculateNetTotal();
+        calculateSaleReturnTotal();
+    }
+
+    function calculateCurrentTotal() {
+        const total = parseFloat(document.getElementById('total').value) || 0;
+        const cashDeposit = parseFloat(document.getElementById('cashDeposit').value) || 0;
+        const cashPayment = parseFloat(document.getElementById('cashPayment').value) || 0;
+        const bankDeposit = parseFloat(document.getElementById('bankDeposit').value) || 0;
+        const bankPayment = parseFloat(document.getElementById('bankPayment').value) || 0;
+    
+        const currentTotal = total + cashPayment + bankPayment - (cashDeposit + bankDeposit);
+        const currentTotalElement = document.getElementById('currentTotal');
+        currentTotalElement.value = currentTotal.toFixed(2);
+    
+        // Change background color based on the value
+        if (currentTotal >= 0) {
+            currentTotalElement.style.backgroundColor = "red";
+        } else {
+            currentTotalElement.style.backgroundColor = "green";
+        }
+    }
+    
+        // Toggle the table visibility
+        function toggleSaleReturn() {
+            var tableContainer = document.getElementById("purchaseReturnTable");
+            tableContainer.style.display = (tableContainer.style.display === "none") ? "block" : "none";
+        }
+
+    function saveData() {
+        alert("Data saved successfully.");
+    }
+    
+  
+    // Initial calculation on load
+    calculateAmount();
+</script>
+</body>
+</html>
